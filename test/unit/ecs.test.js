@@ -40,6 +40,30 @@ describe('ECS', () => {
 
       ecs.update();
     });
+
+    describe('System with frequency', () => {
+      let systemWithFrequency;
+
+      beforeEach(() => {
+        systemWithFrequency = new ECS.System(3);
+      })
+
+      it('does call systemWithFrequency only once, while calling others thrice', () => {
+        sinon.spy(system, 'updateAll');
+        sinon.spy(systemWithFrequency, 'updateAll');
+
+        ecs.addSystem(systemWithFrequency);
+        ecs.addSystem(system);
+
+        ecs.update();
+        ecs.update();
+        ecs.update();
+
+        expect(systemWithFrequency.updateAll.callCount).to.equal(1)
+        expect(system.updateAll.callCount).to.equal(3)
+      })
+    })
+
   });
 
   describe('addSystem()', () => {

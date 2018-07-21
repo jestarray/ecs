@@ -1,3 +1,5 @@
+"use strict";
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -19,5 +21,4 @@ if (!global) {
   };
 }
 
-exports["default"] = perf;
-module.exports = exports["default"];
+exports.default = perf;

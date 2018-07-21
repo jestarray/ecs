@@ -1,14 +1,19 @@
 {
   "name": "yagl-ecs",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "author": "Pierre Beaujeu",
+  "contributors": [
+    "Joachim Eckert"
+  ],
   "description": "Entity Component System for ES6",
   "main": "dist/ecs.js",
   "private": true,
   "scripts": {
+    "build": "babel src --presets babel-preset-env --out-dir dist",
     "test": "mocha -r babel-register -r ./test/setup.js test/**/*.test.js"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
     "chai": "^4.1.2",
@@ -30,9 +35,7 @@
     "design pattern"
   ],
   "licence": "MIT",
-  "dependencies": {
-    "babel-cli": "^6.26.0"
-  },
+  "dependencies": {},
   "babel": {
     "presets": [
       "env"

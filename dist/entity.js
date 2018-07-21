@@ -1,26 +1,24 @@
-Object.defineProperty(exports, '__esModule', {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @module  ecs
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-/**
- * @module  ecs
- */
 
 var _uid = require('./uid');
 
-var _utils = require('./utils');
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
  * An entity.
  *
  * @class  Entity
  */
-
-var Entity = (function () {
+var Entity = function () {
   /**
    * @class Entity
    * @constructor
@@ -32,9 +30,8 @@ var Entity = (function () {
    *
    * @param {Array[Component]} [components=[]] An array of initial components.
    */
-
   function Entity(idOrUidGenerator) {
-    var components = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+    var components = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
     _classCallCheck(this, Entity);
 
@@ -83,7 +80,7 @@ var Entity = (function () {
     this.components = {};
 
     // components initialisation
-    for (var i = 0, component = undefined; component = components[i]; i += 1) {
+    for (var i = 0, component; component = components[i]; i += 1) {
       // if a getDefaults method is provided, use it. First because let the
       // runtime allocate the component is way more faster than using a copy
       // function. Secondly because the user may want to provide some kind
@@ -102,7 +99,6 @@ var Entity = (function () {
      */
     this.ecs = null;
   }
-
   /**
    * Set the parent ecs reference.
    *
@@ -110,18 +106,19 @@ var Entity = (function () {
    * @param {ECS} ecs An ECS class instance.
    */
 
+
   _createClass(Entity, [{
     key: 'addToECS',
     value: function addToECS(ecs) {
       this.ecs = ecs;
       this.setSystemsDirty();
     }
-
     /**
      * Set the systems dirty flag so the ECS knows this entity
      * needs to recompute eligibility at the beginning of next
      * tick.
      */
+
   }, {
     key: 'setSystemsDirty',
     value: function setSystemsDirty() {
@@ -132,35 +129,34 @@ var Entity = (function () {
         this.ecs.entitiesSystemsDirty.push(this);
       }
     }
-
     /**
      * Add a system to the entity.
      *
      * @private
      * @param {System} system The system to add.
      */
+
   }, {
     key: 'addSystem',
     value: function addSystem(system) {
       this.systems.push(system);
     }
-
     /**
      * Remove a system from the entity.
      *
      * @private
      * @param  {System} system The system reference to remove.
      */
+
   }, {
     key: 'removeSystem',
     value: function removeSystem(system) {
       var index = this.systems.indexOf(system);
 
       if (index !== -1) {
-        (0, _utils.fastSplice)(this.systems, index, 1);
+        this.systems.splice(index, 1);
       }
     }
-
     /**
      * Add a component to the entity. WARNING this method does not copy
      * components data but assign directly the reference for maximum
@@ -170,13 +166,13 @@ var Entity = (function () {
      * @param {String} name Attribute name of the component to add.
      * @param {Object} data Component data.
      */
+
   }, {
     key: 'addComponent',
     value: function addComponent(name, data) {
       this.components[name] = data || {};
       this.setSystemsDirty();
     }
-
     /**
      * Remove a component from the entity. To preserve performances, we
      * simple set the component property to `undefined`. Therefore the
@@ -184,6 +180,7 @@ var Entity = (function () {
      *
      * @param  {String} name Name of the component to remove.
      */
+
   }, {
     key: 'removeComponent',
     value: function removeComponent(name) {
@@ -194,7 +191,6 @@ var Entity = (function () {
       this.components[name] = undefined;
       this.setSystemsDirty();
     }
-
     /**
      * Update a component field by field, NOT recursively. If the component
      * does not exists, this method create it silently.
@@ -208,6 +204,7 @@ var Entity = (function () {
      *   entity.updateComponent('kite', {angle: 90, pos: {y: 1}});
      *   // entity.component.pos is '{vel: 0, angle: 90, pos: {y: 1}}'
      */
+
   }, {
     key: 'updateComponent',
     value: function updateComponent(name, data) {
@@ -218,32 +215,32 @@ var Entity = (function () {
       } else {
         var keys = Object.keys(data);
 
-        for (var i = 0, key = undefined; key = keys[i]; i += 1) {
+        for (var i = 0, key; key = keys[i]; i += 1) {
           component[key] = data[key];
         }
       }
     }
-
     /**
      * Update a set of components.
      *
      * @param  {Object} componentsData Dict of components to update.
      */
+
   }, {
     key: 'updateComponents',
     value: function updateComponents(componentsData) {
       var components = Object.keys(componentsData);
 
-      for (var i = 0, component = undefined; component = components[i]; i += 1) {
+      for (var i = 0, component; component = components[i]; i += 1) {
         this.updateComponent(component, componentsData[component]);
       }
     }
-
     /**
      * Dispose the entity.
      *
      * @private
      */
+
   }, {
     key: 'dispose',
     value: function dispose() {
@@ -254,7 +251,6 @@ var Entity = (function () {
   }]);
 
   return Entity;
-})();
+}();
 
-exports['default'] = Entity;
-module.exports = exports['default'];
+exports.default = Entity;

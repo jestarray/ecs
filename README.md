@@ -6,6 +6,12 @@ This repo is a fork of Pierre BEAUJEU yagl-ecs which i use in my games.
 - Making a local NPM module out of it, as i won't publish this to npm
 - Replaced fastSplice with Array.prototype.splice, as fastSplice is 3 times slower nowadays :)
 
+### Installation
+You can install this fork with:
+```
+npm install nerdlibfront/ecs
+```
+
 Entity Component System
 =======================
 

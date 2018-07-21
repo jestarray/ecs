@@ -4,6 +4,7 @@
   "author": "Pierre Beaujeu",
   "description": "Entity Component System for ES6",
   "main": "dist/ecs.js",
+  "private": true,
   "scripts": {
     "test": "mocha -r babel-register -r ./test/setup.js test/**/*.test.js"
   },
@@ -29,8 +30,12 @@
     "design pattern"
   ],
   "licence": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "babel-cli": "^6.26.0"
+  },
   "babel": {
-    "presets": ["env"]
+    "presets": [
+      "env"
+    ]
   }
 }

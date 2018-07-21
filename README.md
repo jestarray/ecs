@@ -1,3 +1,10 @@
+## Updates / Changes from the original version
+This repo is a fork of Pierre BEAUJEU yagl-ecs which i use in my games.
+- The dependencies are updated (as of July 2018)
+- Gulp is removed
+- Some restructuring
+- Making a local NPM module out of it, as i won't publish this to npm
+
 Entity Component System
 =======================
 

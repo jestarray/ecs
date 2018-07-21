@@ -3,7 +3,6 @@
  */
 
 import { UIDGenerator, DefaultUIDGenerator } from './uid';
-import { fastSplice } from './utils';
 
 /**
  * An entity.
@@ -130,7 +129,7 @@ class Entity {
     let index = this.systems.indexOf(system);
 
     if (index !== -1) {
-      fastSplice(this.systems, index, 1);
+      this.systems.splice(index, 1);
     }
   }
   /**

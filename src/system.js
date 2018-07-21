@@ -2,8 +2,6 @@
  * @module  ecs
  */
 
-import { fastSplice } from './utils';
-
 // forced to disable this check for abstract methods
 // jshint unused:false
 /**
@@ -56,7 +54,7 @@ class System {
 
     if (index !== -1) {
       entity.removeSystem(this);
-      fastSplice(this.entities, index, 1);
+      this.entities.splice(index, 1);
 
       this.exit(entity);
     }

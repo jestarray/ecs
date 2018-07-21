@@ -1,7 +1,6 @@
 /**
  * @module  ecs
  */
-
 import { UIDGenerator, DefaultUIDGenerator } from './uid';
 
 /**

@@ -1,5 +1,4 @@
-
-import System from '../../src/system';
+import {System} from '../../src/system'
 
 function getFakeEntity() {
   return {

@@ -8,7 +8,7 @@ import { UIDGenerator, DefaultUIDGenerator } from './uid';
  *
  * @class  Entity
  */
-export default class Entity {
+export class Entity {
   /**
    * @class Entity
    * @constructor

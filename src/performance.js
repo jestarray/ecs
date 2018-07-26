@@ -15,4 +15,4 @@ if (!global) {
   };
 }
 
-export default perf;
+export { perf as performance };

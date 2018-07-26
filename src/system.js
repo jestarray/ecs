@@ -11,7 +11,7 @@
  * This class is not meant to be used directly and should be sub-classed to
  * define specific logic.
  */
-export default class System {
+export class System {
   /**
    * @class  System
    * @constructor

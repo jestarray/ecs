@@ -1,6 +1,6 @@
-import ECS from '../../src/ecs';
-import Entity from '../../src/entity';
-import System from '../../src/system';
+import {ECS} from '../../src/ecs';
+import {Entity} from '../../src/entity';
+import {System} from '../../src/system';
 
 describe('ECS', () => {
   it('should initialize', () => {

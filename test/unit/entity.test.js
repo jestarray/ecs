@@ -1,4 +1,4 @@
-import Entity from '../../src/entity';
+import {Entity} from '../../src/entity'
 
 describe('Entity', () => {
   it('should initialize', () => {

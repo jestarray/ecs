@@ -5,6 +5,7 @@ This repo is a fork of Pierre BEAUJEU yagl-ecs which i use in my games.
 - Some restructuring
 - Making a local NPM module out of it, as i won't publish this to npm
 - Replaced fastSplice with Array.prototype.splice, as fastSplice is 3 times slower nowadays :)
+- Dropped support of CommonJs. But you can still built it manually via `npm run build`
 
 ### Installation
 You can install this fork with:

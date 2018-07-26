@@ -6,7 +6,7 @@
     "Joachim Eckert"
   ],
   "description": "Entity Component System for ES6",
-  "main": "dist/ecs.js",
+  "main": "src/ecs.js",
   "private": true,
   "scripts": {
     "build": "babel src --presets babel-preset-env --out-dir dist",

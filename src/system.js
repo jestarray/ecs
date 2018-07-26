@@ -11,7 +11,7 @@
  * This class is not meant to be used directly and should be sub-classed to
  * define specific logic.
  */
-class System {
+export default class System {
   /**
    * @class  System
    * @constructor
@@ -133,5 +133,3 @@ class System {
   update(entity) {}
 }
 // jshint unused:true
-
-export default System;

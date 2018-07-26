@@ -8,7 +8,7 @@ import { UIDGenerator, DefaultUIDGenerator } from './uid';
  *
  * @class  Entity
  */
-class Entity {
+export default class Entity {
   /**
    * @class Entity
    * @constructor
@@ -208,5 +208,3 @@ class Entity {
     }
   }
 }
-
-export default Entity;

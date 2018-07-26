@@ -1,4 +1,6 @@
 import ECS from '../../src/ecs';
+import Entity from '../../src/entity';
+import System from '../../src/system';
 
 describe('ECS', () => {
   it('should initialize', () => {
@@ -11,7 +13,7 @@ describe('ECS', () => {
   describe('getEntityById()', () => {
     it('should retrieve an entity by id', () => {
       let ecs = new ECS();
-      let entity = new ECS.Entity(123);
+      let entity = new Entity(123);
 
       ecs.addEntity(entity);
 
@@ -24,8 +26,8 @@ describe('ECS', () => {
 
     beforeEach(() => {
       ecs = new ECS();
-      entity = new ECS.Entity();
-      system = new ECS.System();
+      entity = new Entity();
+      system = new System();
     });
 
     it('should give the elapsed time to update methods', (done) => {
@@ -45,7 +47,7 @@ describe('ECS', () => {
       let systemWithFrequency;
 
       beforeEach(() => {
-        systemWithFrequency = new ECS.System(3);
+        systemWithFrequency = new System(3);
       })
 
       it('does call systemWithFrequency only once, while calling others thrice', () => {
@@ -71,8 +73,8 @@ describe('ECS', () => {
 
     beforeEach(() => {
       ecs = new ECS();
-      entity = new ECS.Entity();
-      system = new ECS.System();
+      entity = new Entity();
+      system = new System();
     });
 
     it('should call enter() when update', () => {
@@ -108,8 +110,8 @@ describe('ECS', () => {
 
     beforeEach(() => {
       ecs = new ECS();
-      entity = new ECS.Entity();
-      system = new ECS.System();
+      entity = new Entity();
+      system = new System();
     });
 
     it('should call exit(entity) when removed', () => {
@@ -146,9 +148,9 @@ describe('ECS', () => {
 
     beforeEach(() => {
       ecs = new ECS();
-      entity = new ECS.Entity();
-      system1 = new ECS.System();
-      system2 = new ECS.System();
+      entity = new Entity();
+      system1 = new System();
+      system2 = new System();
     });
 
     it('should call exit(entity) when removed', () => {

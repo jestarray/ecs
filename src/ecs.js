@@ -4,15 +4,15 @@
  * @module ecs
  */
 
-import Entity from './entity';
-import System from './system';
+/** @typedef Entity */
+/** @typedef System */
+
 import performance from './performance';
-import uid from './uid';
 
 /**
  * @class  ECS
  */
-class ECS {
+export default class ECS {
   /**
    * @constructor
    * @class  ECS
@@ -220,10 +220,3 @@ class ECS {
     this.lastUpdate = now;
   }
 }
-
-// expose user stuff
-ECS.Entity = Entity;
-ECS.System = System;
-ECS.uid = uid;
-
-export default ECS;

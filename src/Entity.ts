@@ -4,6 +4,7 @@
 import { UIDGenerator, DefaultUIDGenerator } from './uid';
 import { System } from './system';
 import { ECS } from './ecs';
+import { IComponent } from './IComponent';
 
 /**
  * An entity.
@@ -14,7 +15,7 @@ export class Entity {
   id: number | UIDGenerator | null;
   systems: System[];
   systemsDirty: boolean;
-  components: {};
+  components: {[index: string] : IComponent | undefined};
   ecs: null | ECS;
   /**
    * @class Entity
@@ -27,7 +28,7 @@ export class Entity {
    *
    * @param {Array[Component]} [components=[]] An array of initial components.
    */
-  constructor(idOrUidGenerator: number | UIDGenerator, components = []) {
+  constructor(idOrUidGenerator: number | UIDGenerator, components: IComponent[] = []) {
     /**
      * Unique identifier of the entity.
      *
@@ -73,7 +74,7 @@ export class Entity {
     this.components = {};
 
     // components initialisation
-    for (let i = 0, component: {getDefaults(): object, name: string}; component = components[i]; i += 1) {
+    for (let i = 0, component: IComponent; component = components[i]; i += 1) {
       // if a getDefaults method is provided, use it. First because let the
       // runtime allocate the component is way more faster than using a copy
       // function. Secondly because the user may want to provide some kind
@@ -147,7 +148,7 @@ export class Entity {
    * @param {String} name Attribute name of the component to add.
    * @param {Object} data Component data.
    */
-  addComponent(name: string, data: object) {
+  addComponent(name: string, data: IComponent) {
     this.components[name] = data || {};
     this.setSystemsDirty();
   }
@@ -158,7 +159,7 @@ export class Entity {
    *
    * @param  {String} name Name of the component to remove.
    */
-  removeComponent(name) {
+  removeComponent(name: string) {
     if (!this.components[name]) {
       return;
     }

@@ -1,16 +1,11 @@
 ## Updates / Changes from the original version
-This repo is a fork of Pierre BEAUJEU yagl-ecs which i use in my games.
+This repo is a fork of nerdlibfront/ecs which is inturn forked on Pierre BEAUJEU yagl-ecs.
 - The dependencies are updated (as of July 2018)
 - Gulp is removed
 - Some restructuring
-- Making a local NPM module out of it, as i won't publish this to npm
 - Replaced fastSplice with Array.prototype.splice, as fastSplice is 3 times slower nowadays :)
-
-### Installation
-You can install this fork with:
-```
-npm install nerdlibfront/ecs
-```
+- Converted to typescript
+- Build process is now just typescript
 
 Entity Component System
 =======================
@@ -29,7 +24,7 @@ This library implement the entity component system pattern in EcmaScript6.
  * ES6. 
  * Barebone. No bullshit. No black magic. Take a look at the sources.
  * Flexible. You can subclass the Entity or UIDGenerator classes to implement your own logic. e.g. extend the System class in an EventEmitterSystem class to allow inter-system communication!
- * Fast. Intelligently batch your entities and systems so that the minimum amount of time is spent on pure iteration. Benchmarks in a <hope>near</hope> future.
+ * Fast. Intelligently batch your entities and systems so that the minimum amount of time is spent on pure iteration. Benchmarks in a near future.
  * Fast even for ECS. The eligibility to systems is computed only when components list change, and in most cases the overhead of systems eligibility will be computed once per entity, when added. Therefore there is no overhead for most iterations. [Iteration is often considered as a flaw of ecs pattern](https://en.wikipedia.org/wiki/Entity_component_system#Drawbacks).
 
 ## Getting started
@@ -154,18 +149,13 @@ entity.updateComponent('pos', {
 gameLoop();
 ```
 
-As soon as I have time, I'll provide a real world live example on [yagl.github.io](yagl.github.io). 
-
-If you have more in-depth questions about how to structure a bigger project with ECS, do not hesitate to contact me. I would be happy to give you tips on components and systems encapsulation (this is very important for ECS pattern, your systems and components must be as atomic as possible).
-
 ## Documentation
 
-The full documentation of methods can be found on [yagl.github.io/docs/ecs](yagl.github.io/docs/ecs). Please note that documentation is still a WIP.
+https://yagl.github.io/docs/ecs/ - WIP
 
 ## Roadmap
-
-I'll publish the 0.1 by the end of march. Below a list of TODOs even if the target is not 0.1.
 
  * Maybe more unit test
  * Complete and publish documentation
  * Maybe create a benchmark to track performance evolution
+ * Write a demo and tutorial

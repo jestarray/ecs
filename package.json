@@ -1,31 +1,23 @@
 {
-  "name": "spielemacher-ecs",
+  "name": "jest-ecs",
   "version": "1.4.0",
-  "author": "Pierre Beaujeu",
+  "author": "",
   "contributors": [
+    "Pierre Beaujeu",
     "Joachim Eckert"
   ],
-  "description": "Entity Component System for ES6",
+  "description": "Entity Component System in Typescript",
   "main": "dist/index.js",
-  "private": true,
   "scripts": {
     "build": "babel src --presets babel-preset-env --out-dir dist",
     "test": "mocha -r babel-register -r ./test/setup.js test/**/*.test.js"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.26.0",
-    "chai": "^4.1.2",
-    "mocha": "^5.2.0",
-    "sinon": "^6.1.4"
-  },
-  "engines": {
-    "node": ">=0.10.0"
+    "typescript": "^3.1.4"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nerdlibfront/ecs.git"
+    "url": "https://github.com/jestarray/ecs.git"
   },
   "keywords": [
     "game",
@@ -34,11 +26,5 @@
     "entity component system",
     "design pattern"
   ],
-  "licence": "MIT",
-  "dependencies": {},
-  "babel": {
-    "presets": [
-      "env"
-    ]
-  }
+  "licence": "MIT"
 }

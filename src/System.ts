@@ -1,3 +1,5 @@
+import { Entity } from "./Entity";
+
 /**
  * @module  ecs
  */
@@ -12,6 +14,8 @@
  * define specific logic.
  */
 export class System {
+  frequency: number;
+  entities: Entity[];
   /**
    * @class  System
    * @constructor
@@ -37,7 +41,7 @@ export class System {
    *
    * @param {Entity} entity The entity to add to the system.
    */
-  addEntity(entity) {
+  addEntity(entity: Entity) {
     entity.addSystem(this);
     this.entities.push(entity);
 
@@ -49,7 +53,7 @@ export class System {
    *
    * @param  {Entity} entity Reference of the entity to remove.
    */
-  removeEntity(entity) {
+  removeEntity(entity: Entity) {
     let index = this.entities.indexOf(entity);
 
     if (index !== -1) {
@@ -64,7 +68,7 @@ export class System {
    *
    * @method  updateAll
    */
-  updateAll(elapsed) {
+  updateAll(elapsed: number) {
     this.preUpdate();
 
     for (let i = 0, entity; entity = this.entities[i]; i += 1) {
@@ -106,7 +110,7 @@ export class System {
    * @method  test
    * @param  {Entity} entity The entity to test.
    */
-  test(entity) {
+  test(entity: Entity) {
     return false;
   }
   /**
@@ -115,14 +119,14 @@ export class System {
    * @method  enter
    * @param  {Entity} entity The added entity.
    */
-  enter(entity) {}
+  enter(entity: Entity) {}
   /**
    * Abstract method to subclass. Called when an entity is removed from the system.
    *
    * @method  exit
    * @param  {Entity} entity The removed entity.
    */
-  exit(entity) {}
+  exit(entity: Entity) {}
   /**
    * Abstract method to subclass. Called for each entity to update. This is
    * the only method that should actual mutate entity state.
@@ -130,6 +134,6 @@ export class System {
    * @method  update
    * @param  {Entity} entity The entity to update.
    */
-  update(entity) {}
+  update(entity: Entity, elapsed?: number) {}
 }
 // jshint unused:true

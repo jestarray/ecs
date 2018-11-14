@@ -1,3 +1,6 @@
+import { Entity } from "./Entity";
+import { System } from "./System";
+
 /**
  * Entity Component System module
  *
@@ -7,12 +10,15 @@
 /** @typedef Entity */
 /** @typedef System */
 
-import {performance} from './performance'
-
 /**
  * @class  ECS
  */
 export class ECS {
+  entities: Entity[];
+  entitiesSystemsDirty: Entity[];
+  systems: System[];
+  updateCounter: number;
+  lastUpdate: number;
   /**
    * @constructor
    * @class  ECS
@@ -58,8 +64,8 @@ export class ECS {
    * @param  {Number} id id of the entity to retrieve
    * @return {Entity} The entity if found null otherwise
    */
-  getEntityById(id) {
-    for (let i = 0, entity; entity = this.entities[i]; i += 1) {
+  getEntityById(id: number): Entity | null {
+    for (let i = 0, entity: Entity; entity = this.entities[i]; i += 1) {
       if (entity.id === id) {
         return entity
       }
@@ -74,7 +80,7 @@ export class ECS {
    * @method addEntity
    * @param {Entity} entity The entity to add.
    */
-  addEntity(entity) {
+  addEntity(entity: Entity) {
     this.entities.push(entity)
     entity.addToECS(this)
   }
@@ -86,7 +92,7 @@ export class ECS {
    * @param  {Entity} entity reference of the entity to remove
    * @return {Entity}        the remove entity if any
    */
-  removeEntity(entity) {
+  removeEntity(entity: Entity): Entity | null {
     let index = this.entities.indexOf(entity)
     let entityRemoved = null
 
@@ -107,10 +113,10 @@ export class ECS {
    * Remove an entity from the ecs by entity id.
    *
    * @method removeEntityById
-   * @param  {Entity} entityId id of the entity to remove
+   * @param  {number} entityId id of the entity to remove
    * @return {Entity}          removed entity if any
    */
-  removeEntityById(entityId) {
+  removeEntityById(entityId: number) {
     for (let i = 0, entity; entity = this.entities[i]; i += 1) {
       if (entity.id === entityId) {
         entity.dispose()
@@ -130,7 +136,7 @@ export class ECS {
    * @method removeEntityIfDirty
    * @param  {[type]} entity entity to remove
    */
-  removeEntityIfDirty(entity) {
+  removeEntityIfDirty(entity: Entity) {
     let index = this.entitiesSystemsDirty.indexOf(entity)
 
     if (index !== -1) {
@@ -144,7 +150,7 @@ export class ECS {
    * @method addSystem
    * @param {System} system system to add
    */
-  addSystem(system) {
+  addSystem(system: System) {
     this.systems.push(system)
 
     // iterate over all entities to eventually add system
@@ -161,7 +167,7 @@ export class ECS {
    * @method removeSystem
    * @param  {System} system system reference
    */
-  removeSystem(system) {
+  removeSystem(system: System) {
     let index = this.systems.indexOf(system)
 
     if (index !== -1) {

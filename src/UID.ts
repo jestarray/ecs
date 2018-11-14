@@ -41,6 +41,8 @@ let currentSalt = 0
  * @class  UIDGenerator
  */
 export class UIDGenerator {
+  salt: number;
+  uidCounter: number;
   /**
    * @constructor
    * @class  UIDGenerator
@@ -86,7 +88,7 @@ export class UIDGenerator {
  */
 export const DefaultUIDGenerator = new UIDGenerator(currentSalt++)
 
-export const isSaltedBy = (entityId, salt) => entityId % MAX_SALTS === salt
+export const isSaltedBy = (entityId: number, salt: number) => entityId % MAX_SALTS === salt
 
 /**
  * Return the next unique salt.

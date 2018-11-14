@@ -2,6 +2,8 @@
  * @module  ecs
  */
 import { UIDGenerator, DefaultUIDGenerator } from './uid';
+import { System } from './system';
+import { ECS } from './ecs';
 
 /**
  * An entity.
@@ -9,6 +11,11 @@ import { UIDGenerator, DefaultUIDGenerator } from './uid';
  * @class  Entity
  */
 export class Entity {
+  id: number | UIDGenerator | null;
+  systems: System[];
+  systemsDirty: boolean;
+  components: {};
+  ecs: null | ECS;
   /**
    * @class Entity
    * @constructor
@@ -20,7 +27,7 @@ export class Entity {
    *
    * @param {Array[Component]} [components=[]] An array of initial components.
    */
-  constructor(idOrUidGenerator, components = []) {
+  constructor(idOrUidGenerator: number | UIDGenerator, components = []) {
     /**
      * Unique identifier of the entity.
      *
@@ -66,7 +73,7 @@ export class Entity {
     this.components = {};
 
     // components initialisation
-    for (let i = 0, component; component = components[i]; i += 1) {
+    for (let i = 0, component: {getDefaults(): object, name: string}; component = components[i]; i += 1) {
       // if a getDefaults method is provided, use it. First because let the
       // runtime allocate the component is way more faster than using a copy
       // function. Secondly because the user may want to provide some kind
@@ -92,7 +99,7 @@ export class Entity {
    * @private
    * @param {ECS} ecs An ECS class instance.
    */
-  addToECS(ecs) {
+  addToECS(ecs: ECS) {
     this.ecs = ecs;
     this.setSystemsDirty();
   }
@@ -115,7 +122,7 @@ export class Entity {
    * @private
    * @param {System} system The system to add.
    */
-  addSystem(system) {
+  addSystem(system: System) {
     this.systems.push(system);
   }
   /**
@@ -124,7 +131,7 @@ export class Entity {
    * @private
    * @param  {System} system The system reference to remove.
    */
-  removeSystem(system) {
+  removeSystem(system: System) {
     let index = this.systems.indexOf(system);
 
     if (index !== -1) {
@@ -140,7 +147,7 @@ export class Entity {
    * @param {String} name Attribute name of the component to add.
    * @param {Object} data Component data.
    */
-  addComponent(name, data) {
+  addComponent(name: string, data: object) {
     this.components[name] = data || {};
     this.setSystemsDirty();
   }
@@ -172,7 +179,7 @@ export class Entity {
    *   entity.updateComponent('kite', {angle: 90, pos: {y: 1}});
    *   // entity.component.pos is '{vel: 0, angle: 90, pos: {y: 1}}'
    */
-  updateComponent(name, data) {
+  updateComponent(name: string, data: any) {
     let component = this.components[name];
 
     if (!component) {
@@ -190,7 +197,7 @@ export class Entity {
    *
    * @param  {Object} componentsData Dict of components to update.
    */
-  updateComponents(componentsData) {
+  updateComponents(componentsData: object) {
     let components = Object.keys(componentsData);
 
     for (let i = 0, component; component = components[i]; i += 1) {

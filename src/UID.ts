@@ -49,7 +49,7 @@ export class UIDGenerator {
    * @param  {Number} [salt=0] The salt to use for this generator. Number
    * between 0 and 9999 (inclusive).
    */
-  constructor(salt = 0) {
+  constructor(salt: number = 0) {
     /**
      * The salt of this generator.
      * @property {Number} salt
@@ -68,7 +68,7 @@ export class UIDGenerator {
    *
    * @return {Number} An unique id.
    */
-  next() {
+  next(): number {
     let nextUid = this.salt + this.uidCounter * MAX_SALTS
 
     // if we exceed the number of maximum entities (which is
@@ -96,7 +96,7 @@ export const isSaltedBy = (entityId: number, salt: number) => entityId % MAX_SAL
  * @method  nextSalt
  * @return {Number} A unique salt.
  */
-export const nextSalt = () => {
+export const nextSalt = (): number => {
   let salt = currentSalt
 
   // if we exceed the number of maximum salts, silently reset
@@ -114,4 +114,4 @@ export const nextSalt = () => {
  * @method  nextGenerator
  * @return {UIDGenerator} The created UIDGenerator.
  */
-export const nextGenerator = () => new UIDGenerator(nextSalt());
+export const nextGenerator = (): UIDGenerator => new UIDGenerator(nextSalt());

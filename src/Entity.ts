@@ -1,9 +1,9 @@
 /**
  * @module  ecs
  */
-import { UIDGenerator, DefaultUIDGenerator } from './uid';
-import { System } from './system';
-import { ECS } from './ecs';
+import { UIDGenerator, DefaultUIDGenerator } from './UID';
+import { System } from './System';
+import { ECS } from './ECS';
 import { IComponent } from './IComponent';
 
 /**
@@ -12,10 +12,10 @@ import { IComponent } from './IComponent';
  * @class  Entity
  */
 export class Entity {
-  id: number | UIDGenerator | null;
+  id: number;
   systems: System[];
   systemsDirty: boolean;
-  components: {[index: string] : IComponent | undefined};
+  components: { [index: string]: IComponent | undefined };
   ecs: null | ECS;
   /**
    * @class Entity
@@ -28,28 +28,13 @@ export class Entity {
    *
    * @param {Array[Component]} [components=[]] An array of initial components.
    */
-  constructor(idOrUidGenerator: number | UIDGenerator, components: IComponent[] = []) {
+  constructor(id: number, components: IComponent[] = []) {
     /**
      * Unique identifier of the entity.
      *
      * @property {Number} id
      */
-    this.id = null;
-
-    // initialize id depending on what is the first argument
-    if (typeof idOrUidGenerator === 'number') {
-      // if a number was passed then simply set it as id
-      this.id = idOrUidGenerator;
-    } else if (idOrUidGenerator instanceof UIDGenerator) {
-      // if an instance of UIDGenerator was passed then use it to generate
-      // the id. This allow the user to use multiple UID generators and
-      // therefore to create entities with unique ids accross a cluster
-      // or an async environment. See uid.js for more details
-      this.id = idOrUidGenerator.next();
-    } else {
-      // if nothing was passed simply use the default generator
-      this.id = DefaultUIDGenerator.next();
-    }
+    this.id = id;
 
     /**
      * Systems applied to the entity.
@@ -110,11 +95,11 @@ export class Entity {
    * tick.
    */
   setSystemsDirty() {
-    if (!this.systemsDirty && this.ecs) {
+    if (!this.systemsDirty && this.ecs !== undefined) {
       this.systemsDirty = true;
 
       // notify to parent ECS that this entity needs to be tested next tick
-      this.ecs.entitiesSystemsDirty.push(this);
+      this.ecs.entitiesSystemsDirty.set(this.id, this);
     }
   }
   /**
@@ -148,7 +133,7 @@ export class Entity {
    * @param {String} name Attribute name of the component to add.
    * @param {Object} data Component data.
    */
-  addComponent(name: string, data: IComponent) {
+  addComponent(name: string, data: object) {
     this.components[name] = data || {};
     this.setSystemsDirty();
   }

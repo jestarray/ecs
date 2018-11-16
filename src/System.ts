@@ -3,9 +3,6 @@ import { Entity } from "./Entity";
 /**
  * @module  ecs
  */
-
-// forced to disable this check for abstract methods
-// jshint unused:false
 /**
  * @class  System
  *
@@ -13,15 +10,16 @@ import { Entity } from "./Entity";
  * This class is not meant to be used directly and should be sub-classed to
  * define specific logic.
  */
-export class System {
+
+export abstract class System {
   frequency: number;
-  entities: Entity[];
+  entities: Map<number, Entity>;
   /**
    * @class  System
    * @constructor
    * @param [frequency=1] {Number} Frequency of execution.
    */
-  constructor(frequency=1) {
+  constructor(frequency: number = 1) {
     /**
      * Frequency of update execution, a frequency of `1` run the system every
      * update, `2` will run the system every 2 updates, ect.
@@ -32,20 +30,23 @@ export class System {
     /**
      * Entities of the system.
      *
-     * @property {Array[Entity]} entities
+     * @property {Map<number, Entity>} entities
      */
-    this.entities = [];
+    this.entities = new Map();
   }
   /**
    * Add an entity to the system entities.
    *
    * @param {Entity} entity The entity to add to the system.
    */
-  addEntity(entity: Entity) {
-    entity.addSystem(this);
-    this.entities.push(entity);
 
-    this.enter(entity);
+  addEntity(entity: Entity): void {
+    entity.addSystem(this);
+    this.entities.set(entity.id, entity);
+
+    if (this.enter !== undefined) {
+      this.enter(entity);
+    }
   }
   /**
    * Remove an entity from the system entities. exit() handler is executed
@@ -53,14 +54,16 @@ export class System {
    *
    * @param  {Entity} entity Reference of the entity to remove.
    */
-  removeEntity(entity: Entity) {
-    let index = this.entities.indexOf(entity);
+  removeEntity(entity: Entity): void {
 
-    if (index !== -1) {
-      entity.removeSystem(this);
-      this.entities.splice(index, 1);
-
-      this.exit(entity);
+    for (let [key, value] of this.entities) {
+      if (entity === value) {
+        entity.removeSystem(this);
+        this.entities.delete(key);
+        if (this.exit !== undefined) {
+          this.exit(value);
+        }
+      }
     }
   }
   /**
@@ -68,26 +71,27 @@ export class System {
    *
    * @method  updateAll
    */
+
   updateAll(elapsed: number) {
-    this.preUpdate();
+    if (this.preUpdate !== undefined) { this.preUpdate(); }
 
-    for (let i = 0, entity; entity = this.entities[i]; i += 1) {
-      this.update(entity, elapsed);
+    for (let [key, value] of this.entities) {
+      this.update(value, elapsed);
     }
-
-    this.postUpdate();
+    if (this.postUpdate !== undefined) { this.postUpdate() }
   }
   /**
-   * dispose the system by exiting all the entities
+   * dispose the system by exiting ALL the entities
    *
    * @method  dispose
    */
   dispose() {
-    for (let i = 0, entity; entity = this.entities[i]; i += 1) {
-      entity.removeSystem(this);
-      this.exit(entity);
+    for (let [key, value] of this.entities) {
+      value.removeSystem(this);
+      if (this.exit !== undefined) { this.exit(value); }
     }
   }
+
   // methods to be extended by subclasses
   /**
    * Abstract method to subclass. Called once per update, before entities
@@ -95,14 +99,14 @@ export class System {
    *
    * @method  preUpdate
    */
-  preUpdate() {}
+  abstract preUpdate?(): void
   /**
    * Abstract method to subclass. Called once per update, after entities
    * iteration.
    *
    * @method  postUpdate
    */
-  postUpdate() {}
+  abstract postUpdate?(): void
   /**
    * Abstract method to subclass. Should return true if the entity is eligible
    * to the system, false otherwise.
@@ -110,30 +114,29 @@ export class System {
    * @method  test
    * @param  {Entity} entity The entity to test.
    */
-  test(entity: Entity) {
-    return false;
-  }
+  abstract test(entity: Entity): boolean
   /**
    * Abstract method to subclass. Called when an entity is added to the system.
    *
    * @method  enter
    * @param  {Entity} entity The added entity.
    */
-  enter(entity: Entity) {}
+  abstract enter?(entity: Entity): void
   /**
    * Abstract method to subclass. Called when an entity is removed from the system.
    *
    * @method  exit
    * @param  {Entity} entity The removed entity.
    */
-  exit(entity: Entity) {}
+  abstract exit?(entity: Entity): void
   /**
    * Abstract method to subclass. Called for each entity to update. This is
    * the only method that should actual mutate entity state.
    *
    * @method  update
    * @param  {Entity} entity The entity to update.
+   * @param {number} elapsed the delta time
    */
-  update(entity: Entity, elapsed?: number) {}
+  abstract update(entity: Entity, elapsed?: number): void
 }
 // jshint unused:true

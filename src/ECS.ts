@@ -14,8 +14,8 @@ import { System } from "./System";
  * @class  ECS
  */
 export class ECS {
-  entities: Entity[];
-  entitiesSystemsDirty: Entity[];
+  entities: Map<number, Entity>;
+  entitiesSystemsDirty: Map<number, Entity>;
   systems: System[];
   updateCounter: number;
   lastUpdate: number;
@@ -30,7 +30,7 @@ export class ECS {
      * @property entities
      * @type {Array}
      */
-    this.entities = []
+    this.entities = new Map();
 
     /**
      * Store entities which need to be tested at beginning of next tick.
@@ -38,7 +38,7 @@ export class ECS {
      * @property entitiesSystemsDirty
      * @type {Array}
      */
-    this.entitiesSystemsDirty = []
+    this.entitiesSystemsDirty = new Map();
 
     /**
      * Store all systems of the ECS.
@@ -64,14 +64,9 @@ export class ECS {
    * @param  {Number} id id of the entity to retrieve
    * @return {Entity} The entity if found null otherwise
    */
-  getEntityById(id: number): Entity | null {
-    for (let i = 0, entity: Entity; entity = this.entities[i]; i += 1) {
-      if (entity.id === id) {
-        return entity
-      }
-    }
 
-    return null
+  getEntityById(id: number): Entity | undefined {
+    return this.entities.get(id);
   }
 
   /**
@@ -81,7 +76,7 @@ export class ECS {
    * @param {Entity} entity The entity to add.
    */
   addEntity(entity: Entity) {
-    this.entities.push(entity)
+    this.entities.set(entity.id, entity);
     entity.addToECS(this)
   }
 
@@ -90,43 +85,37 @@ export class ECS {
    *
    * @method removeEntity
    * @param  {Entity} entity reference of the entity to remove
-   * @return {Entity}        the remove entity if any
+   * @return {boolean}        the remove entity if any
    */
-  removeEntity(entity: Entity): Entity | null {
-    let index = this.entities.indexOf(entity)
-    let entityRemoved = null
-
-    // if the entity is not found do nothing
-    if (index !== -1) {
-      entityRemoved = this.entities[index]
-
-      entity.dispose()
-      this.removeEntityIfDirty(entityRemoved)
-
-      this.entities.splice(index, 1)
+  removeEntity(entity: Entity): boolean {
+    for (let [key, value] of this.entities) {
+      if (value === entity) {
+        entity.dispose();
+        this.removeEntityIfDirty(entity);
+        this.entities.delete(key);
+        return true;
+      }
     }
-
-    return entityRemoved
+    return false;
   }
+
 
   /**
    * Remove an entity from the ecs by entity id.
    *
    * @method removeEntityById
    * @param  {number} entityId id of the entity to remove
-   * @return {Entity}          removed entity if any
+   * @return {boolean}          removed entity if any
    */
-  removeEntityById(entityId: number) {
-    for (let i = 0, entity; entity = this.entities[i]; i += 1) {
-      if (entity.id === entityId) {
-        entity.dispose()
-        this.removeEntityIfDirty(entity)
-
-        this.entities.splice(i, 1)
-
-        return entity
-      }
+  removeEntityById(entityId: number): boolean {
+    let entity = this.entities.get(entityId);
+    if (entity !== undefined) {
+      entity.dispose();
+      this.removeEntityIfDirty(entity);
+      this.entities.delete(entityId);
+      return true;
     }
+    return false;
   }
 
   /**
@@ -137,15 +126,16 @@ export class ECS {
    * @param  {[type]} entity entity to remove
    */
   removeEntityIfDirty(entity: Entity) {
-    let index = this.entitiesSystemsDirty.indexOf(entity)
-
-    if (index !== -1) {
-      this.entities.splice(index, 1)
+    for (let [key, value] of this.entities) {
+      if (value === entity) {
+        value.dispose();
+        this.entitiesSystemsDirty.delete(key);
+      }
     }
   }
 
   /**
-   * Add a system to the ecs.
+   * Add a system to the ecs, and test all entities for eligibility for the system
    *
    * @method addSystem
    * @param {System} system system to add
@@ -153,10 +143,9 @@ export class ECS {
   addSystem(system: System) {
     this.systems.push(system)
 
-    // iterate over all entities to eventually add system
-    for (let i = 0, entity; entity = this.entities[i]; i += 1) {
-      if (system.test(entity)) {
-        system.addEntity(entity)
+    for (let [key, value] of this.entities) {
+      if (system.test(value)) {
+        system.addEntity(value);
       }
     }
   }
@@ -184,29 +173,26 @@ export class ECS {
    * @method cleanDirtyEntities
    */
   cleanDirtyEntities() {
-    // jshint maxdepth: 4
 
-    for (let i = 0, entity; entity = this.entitiesSystemsDirty[i]; i += 1) {
-      for (let s = 0, system; system = this.systems[s]; s += 1) {
+    for (let [key, value] of this.entitiesSystemsDirty) {
+      for (let i: number = 0, system: System; system = this.systems[i]; i += 1) {
+
         // for each dirty entity for each system
-        let index = entity.systems.indexOf(system)
-        let entityTest = system.test(entity)
+        let index = value.systems.indexOf(system);
+        let entityTest = system.test(value);
 
-        if (index === -1 && entityTest) {
-          // if the entity is not added to the system yet and should be, add it
-          system.addEntity(entity)
-        } else if (index !== -1 && !entityTest) {
-          // if the entity is added to the system but should not be, remove it
-          system.removeEntity(entity)
+        if (index === -1 && entityTest) { // if the entity is not added to the system yet and should be, add it
+          system.addEntity(value)
+        } else if (index !== -1 && !entityTest) {// if the entity is added to the system but should not be, remove it
+          system.removeEntity(value)
         }
         // else we do nothing the current state is OK
+
       }
+      value.systemsDirty = false
 
-      entity.systemsDirty = false
     }
-    // jshint maxdepth: 3
-
-    this.entitiesSystemsDirty = []
+    this.entitiesSystemsDirty.clear();
   }
 
   /**
@@ -214,16 +200,16 @@ export class ECS {
    *
    * @method update
    */
-  update() {
-    let now = performance.now()
-    let elapsed = now - this.lastUpdate
+  update(): void {
+    let now: number = performance.now()
+    let elapsed: number = now - this.lastUpdate
 
     for (let i = 0, system; system = this.systems[i]; i += 1) {
       if (this.updateCounter % system.frequency > 0) {
         continue
       }
 
-      if (this.entitiesSystemsDirty.length) {
+      if (this.entitiesSystemsDirty.size >= 1) {
         // if the last system flagged some entities as dirty check that case
         this.cleanDirtyEntities()
       }
@@ -234,4 +220,6 @@ export class ECS {
     this.updateCounter += 1
     this.lastUpdate = now
   }
+  static Entity = Entity;
+  static System = System;
 }

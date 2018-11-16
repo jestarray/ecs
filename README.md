@@ -24,8 +24,7 @@ Transiple demo.ts with parcel to see demo.
 
 ## Documentation
 
-<<<<<<< HEAD
 The full documentation of methods can be found on [yagl.github.io/docs/ecs](yagl.github.io/docs/ecs). Please note that documentation is still a WIP.
 =======
 The full documentation of methods can be found on [yagl.github.io/docs/ecs](yagl.github.io/docs/ecs). Please note that documentation is still a WIP.
->>>>>>> 256b29786da8b20d8b979d56142b22012d50260a
+

@@ -23,8 +23,6 @@ This library implement the entity component system pattern in EcmaScript6.
 Transiple demo.ts with parcel to see demo.
 
 ## Documentation
-
-The full documentation of methods can be found on [yagl.github.io/docs/ecs](yagl.github.io/docs/ecs). Please note that documentation is still a WIP.
 =======
 The full documentation of methods can be found on [yagl.github.io/docs/ecs](yagl.github.io/docs/ecs). Please note that documentation is still a WIP.
 

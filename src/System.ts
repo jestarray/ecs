@@ -99,14 +99,18 @@ export abstract class System {
    *
    * @method  preUpdate
    */
-  abstract preUpdate?(): void
+  preUpdate?() {
+    
+  }
   /**
    * Abstract method to subclass. Called once per update, after entities
    * iteration.
    *
    * @method  postUpdate
    */
-  abstract postUpdate?(): void
+  postUpdate?() {
+
+  }
   /**
    * Abstract method to subclass. Should return true if the entity is eligible
    * to the system, false otherwise.
@@ -121,14 +125,18 @@ export abstract class System {
    * @method  enter
    * @param  {Entity} entity The added entity.
    */
-  abstract enter?(entity: Entity): void
+  enter?(entity: Entity) {
+    
+  }
   /**
    * Abstract method to subclass. Called when an entity is removed from the system.
    *
    * @method  exit
    * @param  {Entity} entity The removed entity.
    */
-  abstract exit?(entity: Entity): void
+  exit?(entity: Entity) {
+
+  }
   /**
    * Abstract method to subclass. Called for each entity to update. This is
    * the only method that should actual mutate entity state.
@@ -137,6 +145,8 @@ export abstract class System {
    * @param  {Entity} entity The entity to update.
    * @param {number} elapsed the delta time
    */
-  abstract update(entity: Entity, elapsed?: number): void
+  update(entity: Entity, elapsed?: number) {
+
+  }
 }
 // jshint unused:true

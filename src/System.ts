@@ -99,7 +99,7 @@ export abstract class System {
    *
    * @method  preUpdate
    */
-  preUpdate?() {
+  preUpdate() {
     
   }
   /**
@@ -108,7 +108,7 @@ export abstract class System {
    *
    * @method  postUpdate
    */
-  postUpdate?() {
+  postUpdate() {
 
   }
   /**
@@ -125,7 +125,7 @@ export abstract class System {
    * @method  enter
    * @param  {Entity} entity The added entity.
    */
-  enter?(entity: Entity) {
+  enter(entity: Entity) {
     
   }
   /**
@@ -134,7 +134,7 @@ export abstract class System {
    * @method  exit
    * @param  {Entity} entity The removed entity.
    */
-  exit?(entity: Entity) {
+  exit(entity: Entity) {
 
   }
   /**

@@ -15,7 +15,7 @@ export class Entity {
   id: number;
   systems: System[];
   systemsDirty: boolean;
-  components: { [index: string]: IComponent | undefined };
+  components: { [index: string]: IComponent | undefined | {}};
   ecs: null | ECS;
   /**
    * @class Entity

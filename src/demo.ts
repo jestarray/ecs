@@ -2,25 +2,23 @@ import { ECS } from "./ECS";
 import { Entity } from "./Entity";
 import { System } from "./System";
 import { IComponent } from "./IComponent";
+import { RenderSystem } from "./RenderSystem";
+import { InputSystem } from "./InputSystem";
+
+declare global {
+    interface Window {
+        ecs: ECS;
+    }
+}
+
+//@ts-ignore
+export let ctx: CanvasRenderingContext2D = document.getElementById("canvas").getContext("2d");
 
 const ecs: ECS = new ECS();
 window.ecs = ecs;
-console.log(ecs);
 
-class MovementSystem extends ECS.System {
-    constructor() {
-        super();
-    }
+window.onkeydown = function () {
 
-    test(entity: Entity): boolean {
-        if(entity.components.pos !== undefined){
-            return true;
-        }
-        return false
-    }
-    update(entity: Entity, delta: number): void {
-        entity.components.pos.x += Math.ceil(Math.random() * 10);
-    }
 }
 
 const Position: IComponent = {
@@ -31,19 +29,31 @@ const Position: IComponent = {
     }
 }
 
-const player: Entity = new ECS.Entity(1, [Position]);
-const player2: Entity = new ECS.Entity(2);
+const RectangularBody: IComponent = {
+    name: "body",
+    defaults: {
+        width: 50,
+        height: 50,
+    }
+}
 
-/* for (let i = 1; i < 1; i++) {
-    ecs.addEntity(new ECS.Entity(i, [Position]));
-} */
+const controls: IComponent = {
+    name: "controls",
+    defaults: {
+        pressingDown: false,
+        pressingLeft: false,
+        pressingRight: false,
+        pressingUp: false,
 
-ecs.addSystem(new MovementSystem());
-ecs.addEntity(player);
-ecs.addEntity(player2)
+    }
+}
 
-//movesys.addEntity(player);
-window.player = player;
+
+const snake = new ECS.Entity(0, [Position, RectangularBody, controls]);
+
+ecs.addSystem(new RenderSystem());
+ecs.addSystem(new InputSystem());
+ecs.addEntity(snake);
 
 function gameLoop() {
     ecs.update();

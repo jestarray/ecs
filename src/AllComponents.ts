@@ -1,4 +1,4 @@
-import { GridBodyComponent } from "./components/Render";
-import { InputComponent } from "./components/Input";
+import { GridBodyComponent } from "./components/GridBody";
+import { ControlsComponent } from "./components/Controls";
 
-export type Component = GridBodyComponent & InputComponent;
+export type Component = GridBodyComponent & ControlsComponent;

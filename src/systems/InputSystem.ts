@@ -1,6 +1,6 @@
-import { ECS } from "./ECS";
-import { Entity } from "./Entity";
-import { CMP } from "./Component";
+import { ECS } from "../ECS";
+import { Entity } from "../Entity";
+import { CMP } from "../Component";
 
 export class InputSystem extends ECS.System {
     constructor() {

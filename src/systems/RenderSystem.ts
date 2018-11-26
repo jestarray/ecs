@@ -1,7 +1,7 @@
-import { ECS } from "./ECS";
-import { Entity } from "./Entity";
-import { ctx } from "./demo";
-import { CMP } from "./Component";
+import { ECS } from "../ECS";
+import { Entity } from "../Entity";
+import { ctx } from "../demo";
+import { CMP } from "../Component";
 export class RenderSystem extends ECS.System {
     constructor() {
         super();

@@ -1,6 +1,6 @@
 import { BaseComponent, CMP } from "../Component";
 
-export class InputComponent extends BaseComponent {
+export class ControlsComponent extends BaseComponent {
     pressingDown: boolean;
     pressingLeft: boolean;
     pressingRight: boolean;

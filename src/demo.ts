@@ -1,8 +1,8 @@
-import { InputComponent } from "./components/Input";
-import { GridBodyComponent } from "./components/Render";
+import { ControlsComponent } from "./components/Controls";
+import { GridBodyComponent } from "./components/GridBody";
 import { ECS } from "./ECS";
-import { InputSystem } from "./InputSystem";
-import { RenderSystem } from "./RenderSystem";
+import { InputSystem } from "./systems/InputSystem";
+import { RenderSystem } from "./systems/RenderSystem";
 
 declare global {
     interface Window {
@@ -16,7 +16,7 @@ export let ctx: CanvasRenderingContext2D = document.getElementById("canvas").get
 const ecs: ECS = new ECS();
 window.ecs = ecs;
 
-const snake = new ECS.Entity(0, [new GridBodyComponent(), new InputComponent()]);
+const snake = new ECS.Entity(0, [new GridBodyComponent(), new ControlsComponent()]);
 
 ecs.addSystem(new RenderSystem());
 ecs.addSystem(new InputSystem());

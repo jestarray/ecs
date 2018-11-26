@@ -1,5 +1,6 @@
 import { ECS } from "./ECS";
 import { Entity } from "./Entity";
+import { CMP } from "./Component";
 
 export class InputSystem extends ECS.System {
     constructor() {
@@ -7,60 +8,70 @@ export class InputSystem extends ECS.System {
     }
     enter(entity: Entity) {
         document.onkeydown = function (ev: KeyboardEvent) {
-
             switch (ev.code) {
                 case "KeyD":
-                    entity.components.controls.pressingRight = true;
+                    entity.comp[CMP.INPUT].pressingRight = true;
                     break;
                 case "KeyA":
-                    entity.components.controls.pressingLeft = true;
+                    entity.comp[CMP.INPUT].pressingLeft = true;
                     break;
                 case "KeyW":
-                    entity.components.controls.pressingUp = true;
+                    entity.comp[CMP.INPUT].pressingUp = true;
                     break;
                 case "KeyS":
-                    entity.components.controls.pressingDown = true;
+                    entity.comp[CMP.INPUT].pressingDown = true;
                     break;
             }
         }
         document.onkeyup = function (ev: KeyboardEvent) {
             switch (ev.code) {
                 case "KeyD":
-                    entity.components.controls.pressingRight = false;
+                    entity.comp[CMP.INPUT].pressingRight = false;
                     break;
                 case "KeyA":
-                    entity.components.controls.pressingLeft = false;
+                    entity.comp[CMP.INPUT].pressingLeft = false;
                     break;
                 case "KeyW":
-                    entity.components.controls.pressingUp = false;
+                    entity.comp[CMP.INPUT].pressingUp = false;
                     break;
                 case "KeyS":
-                    entity.components.controls.pressingDown = false;
+                    entity.comp[CMP.INPUT].pressingDown = false;
                     break;
             }
         }
-        
+
     }
 
     test(entity: Entity): boolean {
-        if (entity.components.controls !== undefined) {
+        if (entity.comp[CMP.INPUT] !== undefined) {
             return true;
         }
         return false;
     }
+    isMoving(entity: Entity): boolean {
+        return entity.comp[CMP.GRIDBODY].tileX !== entity.comp[CMP.GRIDBODY].tileToX || entity.comp[CMP.GRIDBODY].tileY !== entity.comp[CMP.GRIDBODY].tileToY;
+    }
     update(entity: Entity, delta: number) {
-        if(entity.components.controls.pressingRight === true){
-            entity.components.pos.x += entity.components.body.width * (delta / 1000);
-        }
-        if(entity.components.controls.pressingLeft === true){
-            entity.components.pos.x += -entity.components.body.width * (delta / 1000);
-        }
 
-        if(entity.components.controls.pressingUp === true){
-            entity.components.pos.y += -entity.components.body.height * (delta / 1000);
-        }
-        if(entity.components.controls.pressingDown === true){
-            entity.components.pos.y += entity.components.body.height * (delta / 1000);
+        if (this.isMoving(entity) === false) {
+            if (entity.comp[CMP.INPUT].pressingRight === true) {
+                entity.comp[CMP.GRIDBODY].tileToX++;
+                entity.comp[CMP.GRIDBODY].vx = 2.5;
+            }
+            if (entity.comp[CMP.INPUT].pressingLeft === true) {
+                entity.comp[CMP.GRIDBODY].tileToX--;
+                entity.comp[CMP.GRIDBODY].vx = -2.5;
+
+            }
+
+            if (entity.comp[CMP.INPUT].pressingUp === true) {
+                entity.comp[CMP.GRIDBODY].tileToY--;
+                entity.comp[CMP.GRIDBODY].vy = -2.5;
+            }
+            if (entity.comp[CMP.INPUT].pressingDown === true) {
+                entity.comp[CMP.GRIDBODY].tileToY++;
+                entity.comp[CMP.GRIDBODY].vy = 2.5;
+            }
         }
     }
 }

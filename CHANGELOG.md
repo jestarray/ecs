@@ -1,3 +1,9 @@
+Version 3.0
+======
+* BREAKING: changed components to comp
+* Added: Components Base Class and Types
+* Removed: lots of cleanups
+
 Version 2.0
 ======
 * Switched most arrays to maps

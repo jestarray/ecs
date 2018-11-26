@@ -20,9 +20,15 @@ This library implement the entity component system pattern in EcmaScript6.
 
 ## Getting started
 
-Transiple demo.ts with parcel to see demo.
+Transiple and bundle with ```parcel index.html```
 
 ## Documentation
-=======
-The full documentation of methods can be found on [yagl.github.io/docs/ecs](yagl.github.io/docs/ecs). Please note that documentation is still a WIP.
 
+The full documentation of methods can be found on [yagl.github.io/docs/ecs](yagl.github.io/docs/ecs). Please note that documentation is still a WIP and may be incompatible with breaking changes
+
+## To Do:
+
+* Fix type errors
+* Benchmark iteration of entites (array vs maps);
+* Get working demo
+* Added intersystems commuinication with event emitters

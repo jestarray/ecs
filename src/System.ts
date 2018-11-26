@@ -120,7 +120,7 @@ export abstract class System {
    */
   abstract test(entity: Entity): boolean
   /**
-   * Abstract method to subclass. Called when an entity is added to the system.
+   * Abstract method to subclass. Called once when an entity is added to the system.
    *
    * @method  enter
    * @param  {Entity} entity The added entity.
@@ -129,7 +129,7 @@ export abstract class System {
     
   }
   /**
-   * Abstract method to subclass. Called when an entity is removed from the system.
+   * Abstract method to subclass. Called once when an entity is removed from the system.
    *
    * @method  exit
    * @param  {Entity} entity The removed entity.

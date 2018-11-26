@@ -1,9 +1,8 @@
+import { InputComponent } from "./components/Input";
+import { GridBodyComponent } from "./components/Render";
 import { ECS } from "./ECS";
-import { Entity } from "./Entity";
-import { System } from "./System";
-import { IComponent } from "./IComponent";
-import { RenderSystem } from "./RenderSystem";
 import { InputSystem } from "./InputSystem";
+import { RenderSystem } from "./RenderSystem";
 
 declare global {
     interface Window {
@@ -17,39 +16,7 @@ export let ctx: CanvasRenderingContext2D = document.getElementById("canvas").get
 const ecs: ECS = new ECS();
 window.ecs = ecs;
 
-window.onkeydown = function () {
-
-}
-
-const Position: IComponent = {
-    name: "pos",
-    defaults: {
-        x: 0,
-        y: 0
-    }
-}
-
-const RectangularBody: IComponent = {
-    name: "body",
-    defaults: {
-        width: 50,
-        height: 50,
-    }
-}
-
-const controls: IComponent = {
-    name: "controls",
-    defaults: {
-        pressingDown: false,
-        pressingLeft: false,
-        pressingRight: false,
-        pressingUp: false,
-
-    }
-}
-
-
-const snake = new ECS.Entity(0, [Position, RectangularBody, controls]);
+const snake = new ECS.Entity(0, [new GridBodyComponent(), new InputComponent()]);
 
 ecs.addSystem(new RenderSystem());
 ecs.addSystem(new InputSystem());

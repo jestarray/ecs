@@ -1,10 +1,10 @@
 /**
  * @module  ecs
  */
-import { Component } from './AllComponents';
 import { ECS } from './ECS';
 import { System } from './System';
 import { UIDGenerator } from './UID';
+import { AllComponents, BaseComponent } from './Component';
 
 /**
  * An entity.
@@ -15,7 +15,7 @@ export class Entity {
   id: number;
   systems: System[];
   systemsDirty: boolean;
-  comp: { [index: number] : Component};
+  comp: AllComponents;
   ecs: null | ECS;
   /**
    * @class Entity
@@ -120,10 +120,10 @@ export class Entity {
   /**
    * Add a component to the entity.
    *
-   * @param {Number} name Attribute name of the component to add.
+   * @param {String} name Attribute name of the component to add.
    * @param {Object} data Component data.
    */
-  addComponent(name: number, data: Component) {
+  addComponent(name: string, data: BaseComponent) {
     this.comp[name] = data;
     this.setSystemsDirty();
   }
@@ -132,9 +132,9 @@ export class Entity {
    * simple set the component property to `null`. Therefore the
    * property is still enumerable after a call to removeComponent()
    *
-   * @param  {Number} name Name of the component to remove.
+   * @param  {String} name Name of the component to remove.
    */
-  removeComponent(name: number) {
+  removeComponent(name: string) {
     if (!this.comp[name]) {
       return;
     }
@@ -155,7 +155,7 @@ export class Entity {
    *   entity.updateComponent('kite', {angle: 90, pos: {y: 1}});
    *   entity.component.pos is '{vel: 0, angle: 90, pos: {y: 1}}'
    */
-  updateComponent(name: number, data: any) {
+  updateComponent(name: string, data: any) {
 
     if (!this.comp[name]) {
       this.addComponent(name, data);

@@ -1,6 +1,19 @@
 import { ECS } from "../ECS";
 import { Entity } from "../Entity";
-import { CMP } from "../Component";
+
+export const map: number[][] = 
+[[0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
 
 export class InputSystem extends ECS.System {
     constructor() {
@@ -10,32 +23,32 @@ export class InputSystem extends ECS.System {
         document.onkeydown = function (ev: KeyboardEvent) {
             switch (ev.code) {
                 case "KeyD":
-                    entity.comp[CMP.INPUT].pressingRight = true;
+                    entity.comp.controls.pressingRight = true;
                     break;
                 case "KeyA":
-                    entity.comp[CMP.INPUT].pressingLeft = true;
+                    entity.comp.controls.pressingLeft = true;
                     break;
                 case "KeyW":
-                    entity.comp[CMP.INPUT].pressingUp = true;
+                    entity.comp.controls.pressingUp = true;
                     break;
                 case "KeyS":
-                    entity.comp[CMP.INPUT].pressingDown = true;
+                    entity.comp.controls.pressingDown = true;
                     break;
             }
         }
         document.onkeyup = function (ev: KeyboardEvent) {
             switch (ev.code) {
                 case "KeyD":
-                    entity.comp[CMP.INPUT].pressingRight = false;
+                    entity.comp.controls.pressingRight = false;
                     break;
                 case "KeyA":
-                    entity.comp[CMP.INPUT].pressingLeft = false;
+                    entity.comp.controls.pressingLeft = false;
                     break;
                 case "KeyW":
-                    entity.comp[CMP.INPUT].pressingUp = false;
+                    entity.comp.controls.pressingUp = false;
                     break;
                 case "KeyS":
-                    entity.comp[CMP.INPUT].pressingDown = false;
+                    entity.comp.controls.pressingDown = false;
                     break;
             }
         }
@@ -43,34 +56,47 @@ export class InputSystem extends ECS.System {
     }
 
     test(entity: Entity): boolean {
-        if (entity.comp[CMP.INPUT] !== undefined) {
+        if (entity.comp.controls !== undefined) {
             return true;
         }
         return false;
     }
     isMoving(entity: Entity): boolean {
-        return entity.comp[CMP.GRIDBODY].tileX !== entity.comp[CMP.GRIDBODY].tileToX || entity.comp[CMP.GRIDBODY].tileY !== entity.comp[CMP.GRIDBODY].tileToY;
+        return entity.comp.body.tileX !== entity.comp.body.tileToX || entity.comp.body.tileY !== entity.comp.body.tileToY;
+    }
+    isWall(x: number, y: number) {
+        switch (map[y][x]) {
+            case 0:
+                return false;
+            case 1:
+                return true;
+        }
     }
     update(entity: Entity, delta: number) {
 
         if (this.isMoving(entity) === false) {
-            if (entity.comp[CMP.INPUT].pressingRight === true) {
-                entity.comp[CMP.GRIDBODY].tileToX++;
-                entity.comp[CMP.GRIDBODY].vx = 2.5;
+            if (entity.comp.controls.pressingRight === true
+                && !this.isWall(entity.comp.body.tileToX + 1, entity.comp.body.tileToY)
+            ) {
+                entity.comp.body.tileToX++;
+                entity.comp.body.vx = 2.5;
             }
-            if (entity.comp[CMP.INPUT].pressingLeft === true) {
-                entity.comp[CMP.GRIDBODY].tileToX--;
-                entity.comp[CMP.GRIDBODY].vx = -2.5;
+            if (entity.comp.controls.pressingLeft === true
+                && !this.isWall(entity.comp.body.tileToX - 1, entity.comp.body.tileToY)) {
+                entity.comp.body.tileToX--;
+                entity.comp.body.vx = -2.5;
 
             }
 
-            if (entity.comp[CMP.INPUT].pressingUp === true) {
-                entity.comp[CMP.GRIDBODY].tileToY--;
-                entity.comp[CMP.GRIDBODY].vy = -2.5;
+            if (entity.comp.controls.pressingUp === true
+                && !this.isWall(entity.comp.body.tileToX, entity.comp.body.tileToY - 1)) {
+                entity.comp.body.tileToY--;
+                entity.comp.body.vy = -2.5;
             }
-            if (entity.comp[CMP.INPUT].pressingDown === true) {
-                entity.comp[CMP.GRIDBODY].tileToY++;
-                entity.comp[CMP.GRIDBODY].vy = 2.5;
+            if (entity.comp.controls.pressingDown === true
+                && !this.isWall(entity.comp.body.tileToX, entity.comp.body.tileToY + 1)) {
+                entity.comp.body.tileToY++;
+                entity.comp.body.vy = 2.5;
             }
         }
     }

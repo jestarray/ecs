@@ -1,15 +1,12 @@
-/* 
-    Use enum to define component names
-*/
+import { GridBodyComponent } from "./components/GridBody";
+import { ControlsComponent } from "./components/Controls";
 
-export const enum CMP {
-    GRIDBODY,
-    INPUT,
+export interface BaseComponent { 
+    name: string | number;
 }
 
-export abstract class BaseComponent {
-    name: CMP;
-    constructor(name: CMP) {
-        this.name = name;
-    }
+export interface AllComponents {
+    [ index: string] : object;
+    body: GridBodyComponent;
+    controls: ControlsComponent;
 }

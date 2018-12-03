@@ -1,12 +1,14 @@
-import { BaseComponent, CMP } from "../Component";
+import { BaseComponent } from "../Component";
 
-export class ControlsComponent extends BaseComponent {
+export class ControlsComponent implements BaseComponent{
+    [index: string] : boolean | number | string;
+    name: string | number;
     pressingDown: boolean;
     pressingLeft: boolean;
     pressingRight: boolean;
     pressingUp: boolean;
     constructor() {
-        super(CMP.INPUT);
+        this.name = "controls"
         this.pressingDown = false;
         this.pressingLeft = false;
         this.pressingRight = false;

@@ -1,7 +1,8 @@
-import { CMP, BaseComponent } from "../Component";
+import { BaseComponent } from "../Component";
 
-export class GridBodyComponent extends BaseComponent {
-    [index: string]: number;
+export class GridBodyComponent implements BaseComponent{
+    name: string | number;
+    [index: string]: number | string;
     tileX: number;
     tileY: number;
     tileToX: number;
@@ -11,8 +12,8 @@ export class GridBodyComponent extends BaseComponent {
     vx: number;
     vy: number;
 
-    constructor(name: CMP = CMP.GRIDBODY, tileX: number = 0, tileY: number = 0, tileToX: number = 0, tileToY: number = 0, width: number = 32, height: number = 32, vx: number = 0, vy: number = 2.5) {
-        super(CMP.GRIDBODY);
+    constructor(tileX: number = 0, tileY: number = 0, tileToX: number = 0, tileToY: number = 0, width: number = 32, height: number = 32, vx: number = 0, vy: number = 2.5) {
+        this.name = "body";
         this.tileX = tileX;
         this.tileY = tileY;
 
@@ -31,4 +32,3 @@ export class GridBodyComponent extends BaseComponent {
         return this.tileY * 32;
     }
 }
-

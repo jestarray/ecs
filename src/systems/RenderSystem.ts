@@ -1,42 +1,44 @@
 import { ECS } from "../ECS";
 import { Entity } from "../Entity";
 import { ctx } from "../demo";
-import { CMP } from "../Component";
+
+import { map } from "./InputSystem";
+
 export class RenderSystem extends ECS.System {
     constructor() {
         super();
     }
     test(entity: Entity): boolean {
-        if (entity.comp[CMP.GRIDBODY] !== undefined) {
+        if (entity.comp.body !== undefined) {
             return true;
         }
         return false;
     }
     renderMovement(entity: Entity, delta: number) {
 
-        if (entity.comp[CMP.GRIDBODY].tileX !== entity.comp[CMP.GRIDBODY].tileToX) {
-            entity.comp[CMP.GRIDBODY].tileX += entity.comp[CMP.GRIDBODY].vx * (delta / 1000);
+        if (entity.comp.body.tileX !== entity.comp.body.tileToX) {
+            entity.comp.body.tileX += entity.comp.body.vx * (delta / 1000);
 
-            if (entity.comp[CMP.GRIDBODY].vx > 0 && entity.comp[CMP.GRIDBODY].tileX > entity.comp[CMP.GRIDBODY].tileToX) { //moving right
-                entity.comp[CMP.GRIDBODY].vx = 0;
-                entity.comp[CMP.GRIDBODY].tileX = entity.comp[CMP.GRIDBODY].tileToX;
+            if (entity.comp.body.vx > 0 && entity.comp.body.tileX > entity.comp.body.tileToX) { //moving right
+                entity.comp.body.vx = 0;
+                entity.comp.body.tileX = entity.comp.body.tileToX;
 
-            } else if (entity.comp[CMP.GRIDBODY].vx < 0 && entity.comp[CMP.GRIDBODY].tileX < entity.comp[CMP.GRIDBODY].tileToX) { //moving left
-                entity.comp[CMP.GRIDBODY].vx = 0;
-                entity.comp[CMP.GRIDBODY].tileX = entity.comp[CMP.GRIDBODY].tileToX;
+            } else if (entity.comp.body.vx < 0 && entity.comp.body.tileX < entity.comp.body.tileToX) { //moving left
+                entity.comp.body.vx = 0;
+                entity.comp.body.tileX = entity.comp.body.tileToX;
             }
         }
 
-        if (entity.comp[CMP.GRIDBODY].tileY !== entity.comp[CMP.GRIDBODY].tileToY) {
-            entity.comp[CMP.GRIDBODY].tileY += entity.comp[CMP.GRIDBODY].vy * (delta / 1000);
+        if (entity.comp.body.tileY !== entity.comp.body.tileToY) {
+            entity.comp.body.tileY += entity.comp.body.vy * (delta / 1000);
 
-            if (entity.comp[CMP.GRIDBODY].vy > 0 && entity.comp[CMP.GRIDBODY].tileY > entity.comp[CMP.GRIDBODY].tileToY) { //moving down
-                entity.comp[CMP.GRIDBODY].vy = 0;
-                entity.comp[CMP.GRIDBODY].tileY = entity.comp[CMP.GRIDBODY].tileToY;
+            if (entity.comp.body.vy > 0 && entity.comp.body.tileY > entity.comp.body.tileToY) { //moving down
+                entity.comp.body.vy = 0;
+                entity.comp.body.tileY = entity.comp.body.tileToY;
 
-            } else if (entity.comp[CMP.GRIDBODY].vy < 0 && entity.comp[CMP.GRIDBODY].tileY < entity.comp[CMP.GRIDBODY].tileToY) { //moving up
-                entity.comp[CMP.GRIDBODY].vy = 0;
-                entity.comp[CMP.GRIDBODY].tileY = entity.comp[CMP.GRIDBODY].tileToY;
+            } else if (entity.comp.body.vy < 0 && entity.comp.body.tileY < entity.comp.body.tileToY) { //moving up
+                entity.comp.body.vy = 0;
+                entity.comp.body.tileY = entity.comp.body.tileToY;
             }
         }
     }
@@ -46,6 +48,18 @@ export class RenderSystem extends ECS.System {
 
         this.renderMovement(entity, delta);
 
-        ctx.fillRect(entity.comp[CMP.GRIDBODY].x, entity.comp[CMP.GRIDBODY].y, entity.comp[CMP.GRIDBODY].width, entity.comp[CMP.GRIDBODY].height);
+        for (let i = 0; i < map.length; i++) {
+
+            for (let j = 0; j < map[i].length; j++) {
+                switch (map[i][j]) {
+                    case 0:
+                        break;
+                    case 1:
+                        ctx.fillRect(j * 32, i * 32, 32, 32);
+                }
+            }
+        }
+
+        ctx.fillRect(entity.comp.body.x, entity.comp.body.y, entity.comp.body.width, entity.comp.body.height);
     }
 }

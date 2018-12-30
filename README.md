@@ -32,3 +32,6 @@ The full documentation of methods can be found on [yagl.github.io/docs/ecs](yagl
 * Benchmark iteration of entites (array vs maps);
 * Get working demo
 * Added intersystems commuinication with event emitters
+
+Bugs:
+* Entity.updateComponent() is probably broken
